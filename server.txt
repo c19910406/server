@@ -1,0 +1,28 @@
+建系统时候Ubuntu的地址设置成阿里云
+http://mirrors.aliyun.com/ubuntu/
+sudo passwd 设置密码
+su - root 切换到管理员权限 
+apt-get update 更新源
+apt-get upgrade 更新软件
+建文件夹
+wget https://repo.anaconda.com/archive/Anaconda3-2019.07-Linux-x86_64.sh
+下载anaconda
+Sh 文件名
+路径为[/root/anaconda3] >>> /root/anaconda3
+然后 把/etc/profile 插入路径
+export PATH=/root/anaconda3/bin:$PATH
+再更新
+Source /etc/profile
+apt-get install neovim
+Pip install neovim
+apt-get install ranger
+apt-get install ctags
+ctags -R 新建tag文件
+新建~/.config/nvim/目录，把init.vim传到此目录下
+下载neovim-plug
+curl -fLo ~/.local/share/nvim/site/autoload/plug.vim --create-dirs \
+    https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
+
+进入nvim，运行:PlugInstall
+
+
