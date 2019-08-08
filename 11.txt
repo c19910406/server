@@ -1,0 +1,103 @@
+﻿安装ubuntu桌面版，
+先sudo passwd 拿权限
+允许root登陆图形界面
+50-ubuntu.conf添加 greeter-show-manual-login=true
+sudo gedit /usr/share/lightdm/lightdm.conf.d/50-ubuntu.conf
+解决登录错误
+将/root/.profile中的 mesg n 替换为 tty -s && mesg n 。
+sudo gedit /root/.profile
+
+为了用root登入，sudo vi /etc/pam.d/gdm（或sudo vi /etc/pam.d/gdm-autologin）中，请注释下面的一行， 
+#auth required pam_succeed_if.so user != root quiet
+如果还不行，到 sudo vi /etc/pam.d/gdm-password,也把上一行注释掉 
+#auth required pam_succeed_if.so user != root quiet
+点击重装vm-tool，会显示地址，
+然后自己建个文件夹，把tar文件copy过来，tar -zxvf 文件名，
+然后./vmware-install.pl 这个文件
+
+
+就这样补全路径，全选yes
+安装完后重启。
+用 nano 把镜像源换成阿里的
+/etc/apt/sources.list
+
+deb http://mirrors.aliyun.com/ubuntu/ bionic main restricted universe multiverse
+deb-src http://mirrors.aliyun.com/ubuntu/ bionic main restricted universe multiverse
+
+deb http://mirrors.aliyun.com/ubuntu/ bionic-security main restricted universe multiverse
+deb-src http://mirrors.aliyun.com/ubuntu/ bionic-security main restricted universe multiverse
+
+deb http://mirrors.aliyun.com/ubuntu/ bionic-updates main restricted universe multiverse
+deb-src http://mirrors.aliyun.com/ubuntu/ bionic-updates main restricted universe multiverse
+
+deb http://mirrors.aliyun.com/ubuntu/ bionic-proposed main restricted universe multiverse
+deb-src http://mirrors.aliyun.com/ubuntu/ bionic-proposed main restricted universe multiverse
+
+deb http://mirrors.aliyun.com/ubuntu/ bionic-backports main restricted universe multiverse
+deb-src http://mirrors.aliyun.com/ubuntu/ bionic-backports main restricted universe multiverse
+
+然后update
+和upgrade
+apt-get install net-tools
+apt-get install openssh-server
+
+
+建文件夹
+wget https://repo.anaconda.com/archive/Anaconda3-2019.07-Linux-x86_64.sh
+下载anaconda
+Sh 文件名
+路径为[/root/anaconda3] >>> /root/anaconda3
+然后 把/etc/profile 插入路径
+export PATH=/root/anaconda3/bin:$PATH
+再更新
+Source /etc/profile
+apt-get install neovim
+Pip install neovim
+apt-get install ranger
+apt-get install ctags
+ctags -R 建立tag
+apt-get install git
+新建~/.config/nvim/目录，把init.vim传到此目录下
+下载neovim-plug
+curl -fLo ~/.local/share/nvim/site/autoload/plug.vim --create-dirs \
+    https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
+
+进入nvim，运行:PlugInstall
+安装google
+安装i3
+Apt install i3
+add-apt-repository ppa:mmstick76/alacritty
+安装alacritty
+安装dmenu 快捷键super+d
+i3在/root/.config/i3/目录下，
+config是系统文件
+搜索return 把i3-。。Terminal  改成 /usr/bin/alacritty
+添加bindsym $mod+c exec google-chrome-stable
+添加for_window [class=”^.*”] border pixel 1
+添加new_window 1pixel
+把/root/.config/alacrity/ 下的文字字体调大一点
+背景色这样
+  primary:
+    background: '0x292C3E'
+foreground: '0xEBEBEB'
+Mod+R 再按上下调整窗格大小
+重启就行
+
+在ubuntu原始桌面下安装搜狗，
+首要得卸载Ubuntu默认的ibus输入法：
+sudo apt-get remove ibus
+
+
+然后添加fcitx的nightlyPPA（软件源）：
+
+sudo add-apt-repository ppa:fcitx-team/nightly
+sudo apt-get update
+
+
+安装fcitx以及搜狗输入法，并设置fcitx为默认。
+
+sudo apt-get install fcitx fcitx-config-gtk fcitx-sunpinyin fcitx-googlepinyin fcitx-module-cloudpinyin
+sudo apt-get install fcitx-table-all
+sudo apt-get install im-switch
+Im-config -s fcitx -z default
+
