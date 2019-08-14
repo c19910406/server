@@ -1,0 +1,136 @@
+MongoDB安装
+
+建一个文件夹 
+wget https://fastdl.mongodb.org/linux/mongodb-linux-x86_64-ubuntu1804-4.0.10.tgz
+
+下载之后解压
+ tar -zxvf mongoxxxxxxx(文件名)
+
+然后 移动到另一个文件夹目录下
+mv 解压好的文件夹名称/ /usr/local/mongodb
+
+添加路径 vim /etc/profile
+export PATH=/usr/local/mongodb/bin:$PATH
+
+刷新
+Source /etc/profile
+
+Cd到最尽头的根目录
+在根目录下面新建 /data/db
+
+然后用screen 把数据库服务端开到后台。
+用mongod启动
+客户端用mongo启动。
+没有配置环境的话，可以进到目录用./启动
+
+
+关闭服务端用结束screen进程的方式
+
+附注：
+在本机上提示错误：error while loading shared libraries: libcurl.so.4:
+安装
+Sudo apt-get install libcurl4-openssl-dev
+需要进到local/mongodb/bin 目录下面启动。
+Sudo ./mongod
+
+附注：
+默认启动：
+?
+$ ./mongodb
+?
+默认数据保存路径：/data/db/
+默认端口：27017
+?
+修改默认路径：
+?
+--dbpath
+$ ./mongdb --dbpath /mongodb/
+把数据存储位置指向一个自己的目录/mongodb/
+?
+修改默认端口：
+?
+--port
+$ ./mongdb --port 20111
+把服务端口修改为20111，这个一方面是为了安全，使用默认端口容易被一些恶意的人发现做手脚
+
+
+NOsql manager for mongoDB配置
+
+本地设置，基本不用改
+
+Ssh设置，增加一下就行
+
+记得，重启该软件才能用
+
+常用命令
+Use xxx 
+进入xxx库，如果没有xxx名，就是新增
+用use xxx 进入后
+db.文档名.insert({xx:”XXX”}) 文档名没有，也会新建。
+db.文档名.find()显示下面所有文档
+db.文档名.find({“cool”:”ss”})显示包含元素文档
+db.createCollection(“xxx”) 创建collection 注意大小写。
+db.文档名.insert([{nn:"oo"},{ss:"sss"}]) 插入多条
+db.xx.find().count()查有多少条
+db.xx.getIndexes()查有多少索引
+db.xx.ensureIndex({“xx”:1}) 1为正序，-1为倒序
+Db.xx.find().sort({“3close”:1}) 顺序
+Use切换到数据库 用db.dropDatabase()来删库
+原json为{“n”:”s”,”qq”:”ss”}
+db.cool.update({"n":"s"},{"kskks":"ss"}) 把cool文档中的{“n”：“s”} 对应的json改成{”kskks“：”ss“}
+更改后为{”kskks“：”ss“}
+
+
+db.文档名.remove({“name”:”hoho”}) 删除所有包含{“name”:”hoho”}条目的json。
+from pymongo import *
+from bson.objectid import ObjectId
+class TestMongo:
+
+    def __init__(self):
+        #初始化，并且进入ass的db之中
+        self.client = MongoClient()
+        self.db =self.client["ass"]
+    def insertone(self):
+        #在名为cool的collection中插入一个document。
+        post = {"Qw":"QW"}
+        self.db.cool.insert_one(post)
+    def insertmany(self):
+        #在名为cool的collection中插入多个document。
+        post = [{"duwei":"dudu","ss":"sss"},{"ll":"ss"}]
+        self.db.cool.insert_many(post)
+    def findone(self):
+        #查找第一份数据，不传参，默认查找collection第一个，传参查找包含要素的第一个。
+        k = self.db.cool.find_one({"Qw":"QW"})
+        print(k)
+    def find(self):
+        #查找多份
+        return self.db.cool.find({"Qw":"QW"})
+    def update(self):
+        #更改数据
+        #把nn：ss键值对，改成ss：qqq,除了$set包含很多种命令，可以查,set只能改字典第一个键一样的。
+        return self.db.cool.update_one({"nn":"ss"},{"$set":{"nn":"qqq"}})
+    def delete(self):
+        #删除含有要素的整个，单个文档
+        return self.db.cool.delete_one({"nn":"qqq"})
+co = TestMongo()
+#查找多份
+#result = co.find()
+#print(result)
+#for item in result:
+   # print(item["_id"])
+co.delete()
+
+
+
+备份启用
+备份：
+先建好文件夹，此处为 /root/qq 
+进入到/usr/local/mongodb/bin 目录下 输入命令./mongodump -h localhost -d ass -o /root/qq
+-d 后面的是数据库名
+
+启用：
+把备份好的文件夹放到机子上
+进入到/usr/local/mongodb/bin目录下
+输入命令
+./mongorestore -h localhost:27017 -d ass /root/qq/ass
+
